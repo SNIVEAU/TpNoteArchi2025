@@ -1,6 +1,8 @@
 <script>
 import TodoItem from './components/TodoItem.vue';
 let data = {
+  questionnaires: [],
+  questions: [],
   todos: [
     { text: 'Faire les courses', checked: true,id:1 },
     { text: 'Apprendre REST', checked: false ,id:2}
@@ -14,6 +16,10 @@ export default {
   },
   components:{
     TodoItem
+  },
+  mounted() {
+    this.fetchQuestionnaire();
+    this.fetchQuestion();
   },
   methods: {
     addItem: function () {
@@ -32,6 +38,28 @@ export default {
         });
         this.newItem = '';
       }
+    },
+    fetchQuestionnaire: function () {
+      fetch('http://127.0.0.1:5000/todo/api/v1.0/questionnaires')
+        .then(response => response.json())
+        .then(data => {
+          this.questionnaires = data;
+          console.log(this.questionnaires);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    },
+    fetchQuestion: function () {
+      fetch('http://127.0.0.1:5000/todo/api/v1.0/questions')
+        .then(response => response.json())
+        .then(data => {
+          this.questions = data;
+          console.log(this.questions);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
     },
     removeItem: function(id) {
       console.log(id)
