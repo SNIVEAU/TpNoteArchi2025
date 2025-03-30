@@ -60,6 +60,6 @@
             class="btn btn-danger"
             value="Modifier"
             @click="modif">
-          </label>
+          </label>label
         </div>
 </template>

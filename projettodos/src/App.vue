@@ -1,5 +1,6 @@
 <script>
 import TodoItem from './components/TodoItem.vue';
+import QuestionnaireItem from './components/QuestionnaireItem.vue';
 let data = {
   questionnaires: [],
   questions: [],
@@ -15,7 +16,8 @@ export default {
     return data;
   },
   components:{
-    TodoItem
+    TodoItem,
+    QuestionnaireItem
   },
   mounted() {
     this.fetchQuestionnaire();
@@ -102,7 +104,14 @@ export default {
             {{ todo.text }}
           </label>
         </div> -->
-        <TodoItem @remove="removeItem" @put="edittodo" :todo="todo"></TodoItem>
+        <QuestionnaireItem 
+          v-for="q in questionnaires"
+          :key="q.id"
+          :questionnaire="q"
+          @remove="removeQuestionnaire"
+          @put="editQuestionnaire"
+          @add="addQuestionToQuestionnaire"
+        />
       </li>
     </ol>
     <div class="input-group">
