@@ -160,9 +160,8 @@ export default {
           return response.json();
         })
         .then(data => {
-          this.questionnaires.push(data);
+          this.questionnaires.push(data["questionnaire"]);
           console.log(this.questionnaires);
-          console.log('Questionnaire ajouté avec succès:', data);
         })
         .catch(error => {
           console.error('Erreur lors de la création du questionnaire:', error);
@@ -244,14 +243,16 @@ export default {
     <h2>{{ title }}</h2>
     <ol>
       <QuestionnaireItem 
-        v-for="q in questionnaires" 
-        :key="q.id" 
-        :questionnaire="q"
-        @remove="removeQuestionnaire"
-        @put="editQuestionnaire"
-        @putquestion="updateQuestion"
-        @addquestion="addQuestion"
-      />
+    v-for="q in questionnaires" 
+    :key="q.id" 
+    :questionnaire="q"
+    @remove="removeQuestionnaire"
+    @put="editQuestionnaire"
+    @putquestion="updateQuestion"
+    @removequestion="removeQuestion"
+/>
+
+
     </ol>
     <div>
     </div>

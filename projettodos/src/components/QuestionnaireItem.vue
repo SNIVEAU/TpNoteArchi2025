@@ -20,28 +20,33 @@ export default {
         showQuestions() {
             this.afficherLesQuestions = !this.afficherLesQuestions;
         },
+
         removeQuestionnaire() {
             this.$emit('remove', { id: this.questionnaire.id });
         },
+
         editQuestionnaire() {
             this.$emit('put', { id: this.questionnaire.id });
         },
+
         addQuestionToQuestionnaire(nouveauNom, questionnaireId) {
             this.$emit('addquestion', nouveauNom, questionnaireId);
         },
+
         putQuestion(id, updatedTitle, questionnaire_id) {
             console.log("putQuestion reçu avec:", id, updatedTitle, questionnaire_id);
-            this.$emit('putquestion', id, updatedTitle, questionnaire_id); // ✅ Vérifier que cet emit est bien utilisé
+            this.$emit('putquestion', id, updatedTitle, questionnaire_id);
         },
+
         removeQuestionFromQuestionnaire(id) {
             console.log("Suppression de la question avec l'ID:", id);
             this.$emit('removequestion', id);
         }
     },
-    emits: ['remove', 'put', 'removequestion', 'putquestion'] // ✅ Ajouter 'putquestion' ici
+
+    emits: ['remove', 'put', 'removequestion', 'putquestion']
 };
 </script>
-
 
 <template>
     <link 
@@ -50,12 +55,13 @@ export default {
     crossorigin="anonymous">
 
     <div>
+        
         <li>{{ questionnaire.name }}</li>
         <ul v-if="questionnaire.questions && questionnaire.questions.length && afficherLesQuestions">
             <li v-for="question in questionnaire.questions" :key="question.id">
                 <QuestionItem 
                     :question="question" 
-                    @remove="removeQuestionFromQuestionnaire"
+                    @removequestion="removeQuestionFromQuestionnaire"
                     @putquestion="putQuestion"
                 />
             </li>
@@ -65,10 +71,12 @@ export default {
             />
 
         </ul>
+        
         <input type="button"
             class="btn btn-primary"
             value="Afficher les questions"
             @click="showQuestions">
+
         <label>
             <input type="button"
             class="btn btn-danger"

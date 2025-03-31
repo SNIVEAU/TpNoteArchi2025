@@ -3,7 +3,7 @@ export default {
   props: {
     question: Object
   },
-  emits: ['remove', 'putquestion'], // ✅ S'assurer que 'putquestion' est bien déclaré ici
+  emits: ['removequestion', 'putquestion'],
   data() {
     return {
       modif: false, 
@@ -12,7 +12,7 @@ export default {
   },
   methods: {
     removeQuestion() {
-      this.$emit('remove', this.question.id);
+      this.$emit('removequestion', this.question.id);
     },
     ModeEdit() {
       this.modif = !this.modif;
@@ -23,7 +23,6 @@ export default {
   }
 };
 </script>
-
 
 <template>
   <link 
