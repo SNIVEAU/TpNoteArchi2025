@@ -1,4 +1,6 @@
 <script>
+import AddQuestionnaire from './components/addQuestionnaire.vue';
+import QuestionItem from './components/QuestionItem.vue';
 import TodoItem from './components/TodoItem.vue';
 let data = {
   questionnaires: [],
@@ -15,7 +17,9 @@ export default {
     return data;
   },
   components:{
-    TodoItem
+    TodoItem,
+    QuestionItem,
+    AddQuestionnaire
   },
   mounted() {
     this.fetchQuestionnaire();
@@ -54,7 +58,7 @@ export default {
       fetch('http://127.0.0.1:5000/todo/api/v1.0/questions')
         .then(response => response.json())
         .then(data => {
-          this.questions = data;
+          this.questions = data['question'];
           console.log(this.questions);
         })
         .catch(error => {
@@ -75,7 +79,77 @@ export default {
           this.todos[index].text = newtext
         }
       }
-    }
+    },
+    removeQuestion(id) {
+      fetch(`http://127.0.0.1:5000/todo/api/v1.0/questions/${id}`, {
+        method: 'DELETE',
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('erreur lors de la suppression');
+          }
+          this.questions = this.questions.filter(question => question.id !== id);
+        })
+        .catch(error => {
+          console.error('erreur lors de la suppression', error);
+        });
+    },
+    newQuestionnaire(nouveauNom){
+      fetch('http://127.0.0.1:5000/todo/api/v1.0/questionnaires', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: nouveauNom }),
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la création du questionnaire');
+          }
+          return response.json();
+        })
+        .then(data => {
+          this.questionnaires.push(data);
+          console.log('Questionnaire ajouté avec succès:', data);
+        })
+        .catch(error => {
+          console.error('Erreur lors de la création du questionnaire:', error);
+        });
+    },
+
+    putQuestion(id, updatedQuestion, questionnaire_id) {
+      const datajson = {
+        title: updatedQuestion,
+        questionnaire_id: questionnaire_id
+      };
+      fetch(`http://127.0.0.1:5000/todo/api/v1.0/questions/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datajson),
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('erreur lors de la mise à jour');
+          }
+          return response.json();
+        })
+        .then(data => {
+          for (let index = 0; index < this.questions.length; index++) {
+            if (this.questions[index].id==id){
+              this.questions[index].title = updatedQuestion;
+            }
+          }
+          console.log('Mise à jour réussie:', data);
+        })
+        .catch(error => {
+          console.error('Erreur lors de la mise à jour:', error);
+        });
+
+    },
+
+
   }
 };
 </script>
@@ -90,38 +164,25 @@ export default {
     <h2>{{ title }}</h2>
     <ol>
       <li 
-        v-for="todo in todos" 
+        v-for="todo in this.todos" 
         v-bind:class="{ 'alert alert-success': todo.checked }"
       >
-        <!-- <div class="checkbox">
-          <label>
-            <input 
-              type="checkbox" 
-              v-model="todo.checked"
-            > 
-            {{ todo.text }}
-          </label>
-        </div> -->
+
         <TodoItem @remove="removeItem" @put="edittodo" :todo="todo"></TodoItem>
       </li>
     </ol>
+    <div>
+      <div v-for="question in questions" :key="question.id">
+        
+        <QuestionItem 
+          :question="question" 
+          @remove="removeQuestion"
+          @putquestion="putQuestion"
+        ></QuestionItem>
+      </div>
+    </div>
     <div class="input-group">
-      <input 
-        v-model="newItem"
-        @keyup.enter="addItem"
-        placeholder="Ajouter une tache à la liste"
-        type="text"
-        class="form-control"
-      >
-      <span class="input-group-btn">
-        <button 
-          @click="addItem"
-          class="btn btn-default"
-          type="button"
-        >
-          Ajouter
-        </button>
-      </span>
+      <AddQuestionnaire @addQuestionnaire="newQuestionnaire(this.nouveauNom)"></AddQuestionnaire>
     </div>
   </div>
 </template>
