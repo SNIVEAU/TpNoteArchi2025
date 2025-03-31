@@ -153,13 +153,14 @@ export default {
         })
         .then(data => {
           this.questionnaires.push(data);
+          console.log(this.questionnaires);
           console.log('Questionnaire ajouté avec succès:', data);
         })
         .catch(error => {
           console.error('Erreur lors de la création du questionnaire:', error);
         });
     },
-    putQuestion(id, updatedQuestion, questionnaire_id) {
+    updateQuestion(id, updatedQuestion, questionnaire_id) {
       const datajson = {
         title: updatedQuestion,
         questionnaire_id: questionnaire_id
@@ -202,12 +203,15 @@ export default {
   <div class="container">
     <h2>{{ title }}</h2>
     <ol>
-      <QuestionnaireItem
-        v-for="questionnaire in questionnaires" 
-        :key="questionnaire.id" 
-        :questionnaire="questionnaire" 
-        @remove="removeQuestionnaire"
-      />
+      <QuestionnaireItem 
+    v-for="q in questionnaires" 
+    :key="q.id" 
+    :questionnaire="q"
+    @remove="removeQuestionnaire"
+    @put="editQuestionnaire"
+    @putquestion="updateQuestion"
+/>
+
     </ol>
     <div>
     </div>

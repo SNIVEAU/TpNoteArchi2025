@@ -3,7 +3,7 @@ export default {
   props: {
     question: Object
   },
-  emits: ['remove', 'putquestion'],
+  emits: ['remove', 'putquestion'], // ✅ S'assurer que 'putquestion' est bien déclaré ici
   data() {
     return {
       modif: false, 
@@ -17,12 +17,13 @@ export default {
     ModeEdit() {
       this.modif = !this.modif;
       if (!this.modif) {
-        this.$emit('putquestion', this.question.id, this.titreactuel,this.question.questionnaire_id);
+        this.$emit('putquestion', this.question.id, this.titreactuel, this.question.questionnaire_id);
       }
     }
   }
 };
 </script>
+
 
 <template>
   <link 
