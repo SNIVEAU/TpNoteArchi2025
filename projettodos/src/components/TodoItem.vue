@@ -36,14 +36,12 @@
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" 
     crossorigin="anonymous"
   >
-<div class="checkbox">
+        <div class="checkbox">
           <label>
             <input v-if="Modifier" id="todo.text"
               type="checkbox" 
               v-model="todo.checked"
-              
-            > 
-
+            >
             <input v-else type="text"
             id="edit"
             placeholder='Veuillez changer le nom de la tache'
@@ -60,6 +58,6 @@
             class="btn btn-danger"
             value="Modifier"
             @click="modif">
-          </label>
+          </label>label
         </div>
 </template>
