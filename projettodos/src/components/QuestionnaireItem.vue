@@ -1,5 +1,6 @@
 <script>
 import QuestionItem from './QuestionItem.vue';
+import AddQuestion from './AddQuestion.vue';
 
 export default {
     props: {
@@ -12,7 +13,8 @@ export default {
         };
     },
     components: {
-        QuestionItem
+        QuestionItem, 
+        AddQuestion
     },
     methods: {
         showQuestions() {
@@ -24,8 +26,8 @@ export default {
         editQuestionnaire() {
             this.$emit('put', { id: this.questionnaire.id });
         },
-        addQuestionToQuestionnaire() {
-            this.$emit('add', { id: this.questionnaire.id });
+        addQuestionToQuestionnaire(nouveauNom, questionnaireId) {
+            this.$emit('addquestion', nouveauNom, questionnaireId);
         },
         putQuestion(id, updatedTitle, questionnaire_id) {
             console.log("putQuestion reçu avec:", id, updatedTitle, questionnaire_id);
@@ -57,6 +59,11 @@ export default {
                     @putquestion="putQuestion"
                 />
             </li>
+            <AddQuestion 
+                @addQuestionnaire="addQuestionToQuestionnaire"
+                :questionnaireId="questionnaire.id"
+            />
+
         </ul>
         <input type="button"
             class="btn btn-primary"
