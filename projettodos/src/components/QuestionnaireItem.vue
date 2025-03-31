@@ -1,87 +1,65 @@
-<script>
-import QuestionItem from './QuestionItem.vue';
-import AddQuestion from './AddQuestion.vue';
-
-export default {
+<template>
+    <div class="card mt-3 p-3">
+      <h2>{{ questionnaire.name }}</h2>
+      <button class="btn btn-secondary btn-sm" @click="showQuestions">
+        {{ afficherLesQuestions ? 'Masquer' : 'Afficher' }} les questions
+      </button>
+      <button class="btn btn-danger btn-sm ms-2" @click="removeQuestionnaire">
+        Supprimer le questionnaire
+      </button>
+  
+      <ul v-if="afficherLesQuestions">
+        <li v-for="question in questionnaire.questions" :key="question.id">
+          <QuestionItem 
+            :question="question" 
+            @removequestion="removeQuestionFromQuestionnaire"
+            @putquestion="putQuestion"
+          />
+        </li>
+        <AddQuestion 
+          @addQuestionnaire="addQuestionToQuestionnaire"
+          :questionnaireId="questionnaire.id"
+        />
+      </ul>
+    </div>
+  </template>
+  
+  <script>
+  import QuestionItem from './QuestionItem.vue';
+  import AddQuestion from './AddQuestion.vue';
+  
+  export default {
     props: {
-        questionnaire: Object
-    },
-    data() {
-        return {
-            Modifier: true,
-            afficherLesQuestions: false,
-        };
+      questionnaire: Object
     },
     components: {
-        QuestionItem, 
-        AddQuestion
+      QuestionItem, 
+      AddQuestion
+    },
+    data() {
+      return {
+        afficherLesQuestions: false
+      };
     },
     methods: {
-        showQuestions() {
-            this.afficherLesQuestions = !this.afficherLesQuestions;
-        },
-
-        removeQuestionnaire() {
-            this.$emit('remove', { id: this.questionnaire.id });
-        },
-
-        editQuestionnaire() {
-            this.$emit('put', { id: this.questionnaire.id });
-        },
-
-        addQuestionToQuestionnaire(nouveauNom, questionnaireId) {
-            this.$emit('addquestion', nouveauNom, questionnaireId);
-        },
-
-        putQuestion(id, updatedTitle, questionnaire_id) {
-            console.log("putQuestion reçu avec:", id, updatedTitle, questionnaire_id);
-            this.$emit('putquestion', id, updatedTitle, questionnaire_id);
-        },
-
-        removeQuestionFromQuestionnaire(id) {
-            console.log("Suppression de la question avec l'ID:", id);
-            this.$emit('removequestion', id);
-        }
+      showQuestions() {
+        this.afficherLesQuestions = !this.afficherLesQuestions;
+      },
+      removeQuestionnaire() {
+        this.$emit('remove', { id: this.questionnaire.id });
+      },
+      putQuestion(id, updatedTitle, questionnaire_id) {
+        this.$emit('putquestion', id, updatedTitle, questionnaire_id);
+      },
+      removeQuestionFromQuestionnaire(id) {
+        this.$emit('removequestion', id);
+        this.questionnaire.questions = this.questionnaire.questions.filter(q => q.id !== id);
+      },
+      addQuestionToQuestionnaire(nouveauNom, questionnaireId) {
+        this.$emit('addquestion', nouveauNom, questionnaireId);
+      }
     },
-
-    emits: ['remove', 'put', 'removequestion', 'putquestion']
-};
-</script>
-
-<template>
-    <link 
-    rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" 
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" 
-    crossorigin="anonymous">
-
-    <div>
-        
-        <li>{{ questionnaire.name }}</li>
-        <ul v-if="questionnaire.questions && questionnaire.questions.length && afficherLesQuestions">
-            <li v-for="question in questionnaire.questions" :key="question.id">
-                <QuestionItem 
-                    :question="question" 
-                    @removequestion="removeQuestionFromQuestionnaire"
-                    @putquestion="putQuestion"
-                />
-            </li>
-            <AddQuestion 
-                @addQuestionnaire="addQuestionToQuestionnaire"
-                :questionnaireId="questionnaire.id"
-            />
-
-        </ul>
-        
-        <input type="button"
-            class="btn btn-primary"
-            value="Afficher les questions"
-            @click="showQuestions">
-
-        <label>
-            <input type="button"
-            class="btn btn-danger"
-            value="Supprimer le questionnaire"
-            @click="removeQuestionnaire">
-        </label>
-    </div>
-</template>
+    emits: ['remove', 'putquestion', 'removequestion', 'addquestion']
+  };
+  </script>
+  

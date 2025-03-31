@@ -1,3 +1,23 @@
+<template>
+  <div class="d-flex justify-content-between align-items-center border p-2">
+    <input 
+      v-if="modif" 
+      type="text" 
+      class="form-control me-2" 
+      v-model="titreactuel"
+    />
+    <span v-else>{{ question.title }}</span>
+
+    <button class="btn btn-primary btn-sm me-2" @click="ModeEdit">
+      {{ modif ? 'Sauvegarder' : 'Modifier' }}
+    </button>
+
+    <button class="btn btn-danger btn-sm" @click="removeQuestion">
+      Supprimer
+    </button>
+  </div>
+</template>
+
 <script>
 export default {
   props: {
@@ -23,32 +43,3 @@ export default {
   }
 };
 </script>
-
-<template>
-  <link 
-    rel="stylesheet" 
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" 
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" 
-    crossorigin="anonymous"
-  >
-  <div class="d-flex justify-content-between align-items-center">
-    <input 
-      :type="modif ? 'text' : 'hidden'" 
-      class="form-control me-2" 
-      v-model="titreactuel"
-    />
-    <span v-if="!modif">{{ question.title }}</span>
-    <button 
-      class="btn btn-primary btn-sm me-2" 
-      @click="ModeEdit"
-    >
-      {{ modif ? 'Sauvegarder' : 'Modifier' }}
-    </button>
-    <button 
-      class="btn btn-danger btn-sm" 
-      @click="removeQuestion"
-    >
-      Supprimer
-    </button>
-  </div>
-</template>
