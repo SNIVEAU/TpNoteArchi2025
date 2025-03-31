@@ -136,6 +136,14 @@ export default {
           console.error('erreur lors de la suppression', error);
         });
     },
+
+    
+    addQuestion(nouveauNom, questionnaireId) {
+      this.newQuestion(nouveauNom, questionnaireId);
+    },
+
+
+
     newQuestionnaire(nouveauNom){
       console.log(nouveauNom)
       fetch('http://127.0.0.1:5000/todo/api/v1.0/questionnaires', {
@@ -159,6 +167,38 @@ export default {
           console.error('Erreur lors de la création du questionnaire:', error);
         });
     },
+
+
+    newQuestion(nouveauNom, questionnaireId) {
+      console.log("Nouvelle question:", nouveauNom, "pour questionnaire:", questionnaireId);
+      fetch('http://127.0.0.1:5000/todo/api/v1.0/questions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          title: nouveauNom,
+          questionnaire_id: questionnaireId,
+          questionType: "Radio"
+        }),
+        
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la création de la question');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log("Question ajoutée avec succès:", data);
+          this.fetchQuestionnaire(); // Pour rafraîchir les données à jour
+        })
+        .catch(error => {
+          console.error('Erreur lors de la création de la question:', error);
+        });
+    },
+
+    
     updateQuestion(id, updatedQuestion, questionnaire_id) {
       const datajson = {
         title: updatedQuestion,
