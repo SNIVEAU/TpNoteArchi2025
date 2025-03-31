@@ -2,13 +2,26 @@
 import TodoItem from './components/TodoItem.vue';
 import QuestionnaireItem from './components/QuestionnaireItem.vue';
 let data = {
-  questionnaires: [],
+  questionnaires: { 
+      id: 1, 
+      name: 'Questionnaire 1', 
+      questions: [
+        { 
+          id: 1, 
+          text: 'Question 1' 
+        }, 
+        { 
+          id: 2, 
+          text: 'Question 2' 
+        }
+      ] 
+    },
   questions: [],
   todos: [
     { text: 'Faire les courses', checked: true,id:1 },
     { text: 'Apprendre REST', checked: false ,id:2}
   ],
-  title: 'Mes tâches',
+  title: 'Mes questionnaires',
   newItem: ''
 };
 export default {
@@ -45,7 +58,7 @@ export default {
       fetch('http://127.0.0.1:5000/todo/api/v1.0/questionnaires')
         .then(response => response.json())
         .then(data => {
-          this.questionnaires = data;
+          this.questionnaires = data["questionnaires"];
           console.log(this.questionnaires);
         })
         .catch(error => {
@@ -62,6 +75,33 @@ export default {
         .catch(error => {
           console.error('Error fetching data:', error);
         });
+    },
+    removeQuestionnaire: function(id) {
+      fetch("http://127.0.0.1:5000/todo/api/v1.0/questionnaires"+"/"+id.id, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          console.log("Questionnaire deleted successfully");
+          this.fetchQuestionnaire();
+        } else {
+          console.error("Error deleting questionnaire");
+        }
+      })
+      .then(data => {
+        for (let index = 0; index < this.questionnaires; index++) {
+          if (this.questionnaires[index].id==id.id){
+            this.questionnaires.splice(index, 1);
+          }          
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
+
     },
     removeItem: function(id) {
       console.log(id)
@@ -84,17 +124,16 @@ export default {
 <template>
   <link 
     rel="stylesheet" 
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" 
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" 
     crossorigin="anonymous"
   >
   <div class="container">
     <h2>{{ title }}</h2>
     <ol>
-      <li 
+      <!-- <li 
         v-for="todo in todos" 
         v-bind:class="{ 'alert alert-success': todo.checked }"
-      >
+      > -->
         <!-- <div class="checkbox">
           <label>
             <input 
@@ -104,13 +143,11 @@ export default {
             {{ todo.text }}
           </label>
         </div> -->
-        <QuestionnaireItem 
-          v-for="q in questionnaires"
-          :key="q.id"
-          :questionnaire="q"
+      <!-- </li> -->
+      <li v-for="questionnaire in questionnaires" :key="questionnaire.id">
+        <QuestionnaireItem
+          :questionnaire="questionnaire"
           @remove="removeQuestionnaire"
-          @put="editQuestionnaire"
-          @add="addQuestionToQuestionnaire"
         />
       </li>
     </ol>

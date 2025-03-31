@@ -6,11 +6,13 @@
         data () {
             return {
                 Modifier : true,
+                afficherLesQuestions : false,
             }
         },
         methods: {
             showQuestions: function(){
-                console.log(this.questionnaire.questions)
+                this.afficherLesQuestions = !this.afficherLesQuestions;
+                console.log("coucou");
             },
             removeQuestionnaire: function(){
                 this.$emit('remove', { id: this.questionnaire.id });
@@ -28,23 +30,14 @@
 </script>
 
 <template>
-
-
     <link 
     rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <div>
-          <!-- <label>
-            <input v-if="Modifier" id="todo.text"
-              type="checkbox" 
-              v-model="todo.checked">
-            <input v-else type="text"
-            id="edit"
-            placeholder='Veuillez changer le nom du questionnaire'
-            v-model="todo.text">
-            {{ todo.text }}
-          </label> -->
-          <li>{{  questionnaire.nom }}</li>
-          <input type="button"
+          <li> {{ questionnaire.name }} </li>
+          <ul v-if="questionnaire.questions && questionnaire.questions.length && this.afficherLesQuestions">
+            <li v-for="q in questionnaire.questions" :key="q.id">{{ q.title }}</li>
+          </ul>
+           <input type="button"
             class="btn btn-danger"
             value="Afficher les questions"
             @click="showQuestions">
@@ -54,8 +47,5 @@
             value="Supprimer le questionnaire"
             @click="removeQuestionnaire">
           </label>
-          <ul v-if="questionnaire.questions && questionnaire.questions.length">
-            <li v-for="q in questionnaire.questions" :key="q.id">{{ q.text }}</li>
-          </ul>
         </div>
 </template>
