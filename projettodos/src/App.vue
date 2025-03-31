@@ -137,6 +137,7 @@ export default {
         });
     },
     newQuestionnaire(nouveauNom){
+      console.log(nouveauNom)
       fetch('http://127.0.0.1:5000/todo/api/v1.0/questionnaires', {
         method: 'POST',
         headers: {
@@ -223,7 +224,7 @@ export default {
       </div>
     </div>
     <div class="input-group">
-      <AddQuestionnaire @addQuestionnaire="newQuestionnaire(this.nouveauNom)"></AddQuestionnaire>
+      <AddQuestionnaire @addQuestionnaire="newQuestionnaire"></AddQuestionnaire>
     </div>
   </div>
 </template>
