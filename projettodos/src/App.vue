@@ -152,9 +152,8 @@ export default {
           return response.json();
         })
         .then(data => {
-          this.questionnaires.push(data);
+          this.questionnaires.push(data["questionnaire"]);
           console.log(this.questionnaires);
-          console.log('Questionnaire ajouté avec succès:', data);
         })
         .catch(error => {
           console.error('Erreur lors de la création du questionnaire:', error);
@@ -210,7 +209,9 @@ export default {
     @remove="removeQuestionnaire"
     @put="editQuestionnaire"
     @putquestion="updateQuestion"
+    @removequestion="removeQuestion"
 />
+
 
     </ol>
     <div>
