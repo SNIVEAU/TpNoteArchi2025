@@ -1,4 +1,5 @@
 <script>
+import QuestionItem from './QuestionItem.vue';
     export default {
         props: {
             questionnaire : Object
@@ -8,6 +9,9 @@
                 Modifier : true,
                 afficherLesQuestions : false,
             }
+        },
+        components:{
+            QuestionItem
         },
         methods: {
             showQuestions: function(){
@@ -35,7 +39,14 @@
         <div>
           <li> {{ questionnaire.name }} </li>
           <ul v-if="questionnaire.questions && questionnaire.questions.length && this.afficherLesQuestions">
-            <li v-for="q in questionnaire.questions" :key="q.id">{{ q.title }}</li>
+            <!-- <li v-for="q in questionnaire.questions" :key="q.id">{{ q.title }}</li> -->
+            <li v-for="question in questionnaire.questions" :key="question.id">
+                <QuestionItem 
+                    :question="question" 
+                    @remove="removeQuestion"
+                    @putquestion="putQuestion"
+                ></QuestionItem>
+            </li>
           </ul>
            <input type="button"
             class="btn btn-danger"

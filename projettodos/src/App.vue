@@ -158,7 +158,6 @@ export default {
           console.error('Erreur lors de la création du questionnaire:', error);
         });
     },
-
     putQuestion(id, updatedQuestion, questionnaire_id) {
       const datajson = {
         title: updatedQuestion,
@@ -190,8 +189,6 @@ export default {
         });
 
     },
-
-
   }
 };
 </script>
@@ -204,23 +201,14 @@ export default {
   <div class="container">
     <h2>{{ title }}</h2>
     <ol>
-      <li 
-        v-for="todo in this.todos" 
-        v-bind:class="{ 'alert alert-success': todo.checked }"
-      >
-
-        <TodoItem @remove="removeItem" @put="edittodo" :todo="todo"></TodoItem>
-      </li>
+      <QuestionnaireItem
+        v-for="questionnaire in questionnaires" 
+        :key="questionnaire.id" 
+        :questionnaire="questionnaire" 
+        @remove="removeQuestionnaire"
+      />
     </ol>
     <div>
-      <div v-for="question in questions" :key="question.id">
-        
-        <QuestionItem 
-          :question="question" 
-          @remove="removeQuestion"
-          @putquestion="putQuestion"
-        ></QuestionItem>
-      </div>
     </div>
     <div class="input-group">
       <AddQuestionnaire @addQuestionnaire="newQuestionnaire(this.nouveauNom)"></AddQuestionnaire>
