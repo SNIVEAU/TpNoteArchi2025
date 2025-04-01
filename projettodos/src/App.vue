@@ -250,6 +250,7 @@ export default {
     @put="editQuestionnaire"
     @putquestion="updateQuestion"
     @removequestion="removeQuestion"
+    @addquestion="newQuestion"
 />
 
 
