@@ -198,6 +198,30 @@ export default {
         });
     },
 
+    modifierQuestionnaire(nouveauNom, questionnaireId) {
+      console.log("Modification du questionnaire :", nouveauNom, "ID :", questionnaireId);
+      
+      fetch(`http://127.0.0.1:5000/todo/api/v1.0/questionnaires/${questionnaireId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: nouveauNom }),
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la modification du questionnaire');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log("Questionnaire modifié avec succès :", data);
+          this.fetchQuestionnaire();
+        })
+        .catch(error => {
+          console.error('Erreur lors de la modification du questionnaire :', error);
+        });
+    },
+
+
     
     updateQuestion(id, updatedQuestion, questionnaire_id) {
       const datajson = {
@@ -247,7 +271,7 @@ export default {
     :key="q.id" 
     :questionnaire="q"
     @remove="removeQuestionnaire"
-    @put="editQuestionnaire"
+    @put="modifierQuestionnaire"
     @putquestion="updateQuestion"
     @removequestion="removeQuestion"
     @addquestion="newQuestion"

@@ -19,10 +19,8 @@
                     const newtext = document.getElementById("edit").value;
                     console.log(newtext)
                     this.$emit('put', { id: this.todo.id, newtext: newtext });
-
                 }
                 this.Modifier = !this.Modifier
-
             }
         },
         emits : ['remove','put']
