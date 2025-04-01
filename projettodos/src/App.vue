@@ -225,7 +225,7 @@ export default {
     
     updateQuestion(id, updatedQuestion, questionnaire_id) {
       const datajson = {
-        title: updatedQuestion,
+        title: updatedQuestion, // Assurez-vous que cela correspond à la propriété utilisée dans votre vue (peut-être "text")
         questionnaire_id: questionnaire_id
       };
       fetch(`http://127.0.0.1:5000/todo/api/v1.0/questions/${id}`, {
@@ -237,22 +237,18 @@ export default {
       })
         .then(response => {
           if (!response.ok) {
-            throw new Error('erreur lors de la mise à jour');
+            throw new Error('Erreur lors de la mise à jour');
           }
           return response.json();
         })
         .then(data => {
-          for (let index = 0; index < this.questions.length; index++) {
-            if (this.questions[index].id==id){
-              this.questions[index].title = updatedQuestion;
-            }
-          }
           console.log('Mise à jour réussie:', data);
+          // Recharger l'ensemble des questionnaires pour mettre à jour les questions affichées
+          this.fetchQuestionnaire();
         })
         .catch(error => {
           console.error('Erreur lors de la mise à jour:', error);
         });
-
     },
   }
 };
